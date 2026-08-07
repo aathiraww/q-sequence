@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Q-SEQ AMR — Know when the evidence is enough.</title>
+  <meta name="description" content="Q-SEQ AMR is a biological-question-aware sequencing intelligence platform. It monitors sequencing evidence in real time and helps researchers decide whether a run is ready for species identification and antimicrobial resistance analysis." />
+
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0c0e'/%3E%3Ccircle cx='16' cy='16' r='8' fill='none' stroke='%23ff3d9a' stroke-width='2.5' stroke-dasharray='31 12'/%3E%3C/svg%3E" />
+</head>
+<body data-theme="dark">
+
+  <!-- ============ PRELOADER ============ -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader-inner">
+      <span class="preloader-mark">Q-SEQ</span>
+      <span class="preloader-line"><span class="preloader-fill"></span></span>
+      <span class="preloader-meta mono">CALIBRATING EVIDENCE ENGINE</span>
+    </div>
+  </div>
+
+  <!-- ============ NAVIGATION ============ -->
+  <header class="nav" id="nav">
+    <a class="nav-logo" href="#top" aria-label="Q-SEQ AMR home">
+      <svg class="nav-logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="40 15" />
+        <circle cx="16" cy="16" r="3" fill="currentColor" />
+      </svg>
+      <span>Q-SEQ<em>/AMR</em></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#platform">Platform</a>
+      <a href="#problem">Problem</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#features">Features</a>
+      <a href="#intelligence">Live</a>
+      <a href="#use-cases">Use&nbsp;Cases</a>
+      <a href="#technology">Technology</a>
+    </nav>
+
+    <div class="nav-cta-wrap">
+      <a class="nav-cta" href="#contact"><span>Request Demo</span></a>
+      <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile overlay menu -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <nav class="menu-overlay-links" aria-label="Mobile">
+      <a href="#platform"><span class="mono">01</span>Platform</a>
+      <a href="#problem"><span class="mono">02</span>Problem</a>
+      <a href="#workflow"><span class="mono">03</span>Workflow</a>
+      <a href="#features"><span class="mono">04</span>Features</a>
+      <a href="#intelligence"><span class="mono">05</span>Live Intelligence</a>
+      <a href="#use-cases"><span class="mono">06</span>Use Cases</a>
+      <a href="#technology"><span class="mono">07</span>Technology</a>
+      <a href="#contact"><span class="mono">08</span>Contact</a>
+    </nav>
+    <p class="menu-overlay-meta mono">Q-SEQ AMR — SEQUENCING INTELLIGENCE PLATFORM</p>
+  </div>
+
+  <main id="top">
+
+    <!-- ============ 01 · HERO ============ -->
+    <section class="hero" id="hero">
+      <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+      <div class="hero-vignette" aria-hidden="true"></div>
+
+      <div class="hero-frame" aria-hidden="true">
+        <span class="hero-frame-item mono" data-pos="tl">BIOLOGICAL-QUESTION-AWARE</span>
+        <span class="hero-frame-item mono" data-pos="tr">RT-EVIDENCE / v2.4</span>
+        <span class="hero-frame-item mono" data-pos="bl">51.7520° N &nbsp;/&nbsp; 1.2577° W</span>
+        <span class="hero-frame-item mono" data-pos="br">RUN-0047 · LIVE</span>
+      </div>
+
+      <span class="hero-vertical mono" aria-hidden="true">SEQUENCING&nbsp;INTELLIGENCE&nbsp;—&nbsp;Q-SEQ&nbsp;AMR</span>
+
+      <div class="hero-content">
+        <p class="hero-eyebrow mono reveal">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          Q-SEQ AMR — SEQUENCING INTELLIGENCE PLATFORM
+        </p>
+
+        <h1 class="hero-title" aria-label="Know when the evidence is enough.">
+          <span class="hero-line"><span>KNOW WHEN</span></span>
+          <span class="hero-line"><span>THE <em>EVIDENCE</em></span></span>
+          <span class="hero-line"><span>IS ENOUGH<i class="accent-dot">.</i></span></span>
+        </h1>
+
+        <div class="hero-sub reveal">
+          <p>A biological-question-aware sequencing intelligence platform that monitors sequencing evidence in real time — and helps determine whether a run is ready for species identification and antimicrobial resistance analysis.</p>
+          <div class="hero-actions">
+            <a class="btn btn-solid" href="#platform"><span>Explore Platform</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 3.5 13.5 8 9 12.5" /></svg></a>
+            <a class="btn btn-ghost" href="#workflow"><span>View Sequencing Workflow</span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-ticker" aria-hidden="true">
+        <div class="hero-ticker-track mono">
+          <span>SPECIES READINESS — 96%</span><i>·</i>
+          <span>AMR READINESS — 81%</span><i>·</i>
+          <span>CRITICAL TARGET COVERAGE — 67%</span><i>·</i>
+          <span>RECOMMENDATION — CONTINUE</span><i>·</i>
+          <span>READS ANALYSED — 1,284,096</span><i>·</i>
+          <span>EVIDENCE MODEL — BAYESIAN / ADAPTIVE</span><i>·</i>
+          <span>SPECIES READINESS — 96%</span><i>·</i>
+          <span>AMR READINESS — 81%</span><i>·</i>
+          <span>CRITICAL TARGET COVERAGE — 67%</span><i>·</i>
+          <span>RECOMMENDATION — CONTINUE</span><i>·</i>
+          <span>READS ANALYSED — 1,284,096</span><i>·</i>
+          <span>EVIDENCE MODEL — BAYESIAN / ADAPTIVE</span><i>·</i>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 02 · WHAT Q-SEQ DOES ============ -->
+    <section class="section section-light" id="platform" data-nav-theme="light">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow mono"><span class="eyebrow-index">01</span> PLATFORM</p>
+          <h2 class="display">Sequencing <em>intelligence</em>,<br />not just sequencing output.</h2>
+        </div>
+
+        <div class="platform-intro">
+          <p class="lede reveal">Q-SEQ AMR helps researchers interpret sequencing runs in terms of <strong>biological readiness</strong>. Instead of only reporting raw sequencing statistics, it answers a sharper question — is the evidence you have generated sufficient for the conclusion you actually need to draw?</p>
+          <div class="platform-annotation reveal">
+            <p class="mono">EVIDENCE ≠ DATA VOLUME</p>
+            <p>Every run is evaluated against the biological question it was started for — not against generic throughput thresholds.</p>
+          </div>
+        </div>
+
+        <div class="readiness-grid stagger">
+          <article class="readiness-card">
+            <span class="readiness-index mono">R·01</span>
+            <div class="readiness-glyph" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="17" /><circle cx="24" cy="24" r="9" /><circle cx="24" cy="24" r="2.5" class="fill" /></svg></div>
+            <h3>Species identification readiness</h3>
+            <p>Continuous confidence scoring for taxonomic assignment — know the moment identity is resolved beyond doubt.</p>
+          </article>
+
+          <article class="readiness-card">
+            <span class="readiness-index mono">R·02</span>
+            <div class="readiness-glyph" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M8 34c8 0 8-20 16-20s8 20 16 20" /><path d="M8 14c8 0 8 20 16 20s8-20 16-20" /></svg></div>
+            <h3>AMR gene detection readiness</h3>
+            <p>Per-gene evidence accumulation across the resistome, weighted by clinical and surveillance relevance.</p>
+          </article>
+
+          <article class="readiness-card">
+            <span class="readiness-index mono">R·03</span>
+            <div class="readiness-glyph" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M10 38 24 10l14 28" /><path d="M16 28h16" /><circle cx="24" cy="10" r="2.5" class="fill" /></svg></div>
+            <h3>Mutation evidence readiness</h3>
+            <p>Depth-aware confidence for resistance-conferring point mutations at the loci that decide the answer.</p>
+          </article>
+
+          <article class="readiness-card">
+            <span class="readiness-index mono">R·04</span>
+            <div class="readiness-glyph" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M8 40h32" /><path d="M10 40V26M18 40V16M26 40V30M34 40V20" /></svg></div>
+            <h3>Coverage sufficiency</h3>
+            <p>Not average depth — the distribution of evidence across every target that matters to your question.</p>
+          </article>
+
+          <article class="readiness-card readiness-card-accent">
+            <span class="readiness-index mono">R·05</span>
+            <div class="readiness-glyph" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 8v20" /><path d="M15 20l9 9 9-9" /><path d="M10 38h28" /></svg></div>
+            <h3>Continue / stop decisions</h3>
+            <p>A defensible, question-aware recommendation for the single most expensive decision in every run.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 03 · THE PROBLEM ============ -->
+    <section class="section section-gray" id="problem" data-nav-theme="light">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow mono"><span class="eyebrow-index">02</span> THE PROBLEM</p>
+          <h2 class="display">Coverage is not<br />the same as <em>confidence</em>.</h2>
+        </div>
+
+        <div class="problem-grid">
+          <div class="problem-copy reveal">
+            <p class="lede">Modern sequencing produces extraordinary volumes of data. Yet at the bench, the essential question stays unanswered: <strong>do I have enough evidence for the biological question I actually care about?</strong></p>
+            <p>Run metrics describe machines, not conclusions. Reads, bases and mean depth say nothing about whether a specific resistance gene is resolvable, a species call is safe, or a critical locus is still starved of evidence. Q-SEQ AMR was designed to close that gap.</p>
+            <div class="problem-figure" aria-hidden="true">
+              <svg class="coverage-debt-svg" viewBox="0 0 560 190" preserveAspectRatio="xMidYMid meet">
+                <line x1="20" y1="150" x2="540" y2="150" class="cds-axis" />
+                <line x1="20" y1="60" x2="540" y2="60" class="cds-threshold" />
+                <text x="20" y="50" class="cds-label">REQUIRED EVIDENCE — PER TARGET</text>
+                <g class="cds-bars"></g>
+                <text x="20" y="178" class="cds-label">GENOME POSITION →</text>
+                <text x="540" y="178" class="cds-label cds-label-right">MEAN DEPTH: “SUFFICIENT”</text>
+              </svg>
+              <p class="mono problem-figure-caption">FIG. 01 — A RUN CAN PASS ON AVERAGE AND FAIL WHERE IT MATTERS.</p>
+            </div>
+          </div>
+
+          <ul class="problem-index stagger">
+            <li>
+              <span class="mono">P·01</span>
+              <div><h3>Over-sequencing</h3><p>Flow cells run for hours after the answer was already in hand — burning reagents, machine time and budget.</p></div>
+            </li>
+            <li>
+              <span class="mono">P·02</span>
+              <div><h3>Under-sequencing</h3><p>Runs are stopped on instinct or schedule, leaving key resistance loci below the evidence threshold.</p></div>
+            </li>
+            <li>
+              <span class="mono">P·03</span>
+              <div><h3>Uneven evidence across targets</h3><p>Global averages hide local starvation. One well-covered region can mask a critically under-covered gene.</p></div>
+            </li>
+            <li>
+              <span class="mono">P·04</span>
+              <div><h3>Uncertainty in AMR detection</h3><p>Absence of a resistance call is only meaningful if the evidence was sufficient to detect it in the first place.</p></div>
+            </li>
+            <li>
+              <span class="mono">P·05</span>
+              <div><h3>No principled stopping point</h3><p>Without a readiness signal, “when to stop” is a guess dressed up as a protocol.</p></div>
+            </li>
+            <li>
+              <span class="mono">P·06</span>
+              <div><h3>Data without direction</h3><p>Translating read generation into actionable biological readiness is left entirely to the researcher.</p></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 04 · HOW IT WORKS ============ -->
+    <section class="section section-light" id="workflow" data-nav-theme="light">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow mono"><span class="eyebrow-index">03</span> WORKFLOW</p>
+          <h2 class="display">How Q-SEQ <em>works</em></h2>
+          <p class="section-head-note">Four movements — from question to defensible decision.</p>
+        </div>
+
+        <ol class="steps">
+          <li class="step reveal">
+            <div class="step-num" aria-hidden="true"><span>01</span></div>
+            <div class="step-body">
+              <p class="step-kicker mono">DEFINE</p>
+              <h3>Define the mission</h3>
+              <p>Researchers declare what the run must deliver — the species question, the AMR panel, the loci that cannot be left uncertain. The mission becomes the yardstick for everything that follows.</p>
+            </div>
+            <div class="step-visual" aria-hidden="true">
+              <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="44" class="sv-ring" /><circle cx="60" cy="60" r="28" class="sv-ring" /><circle cx="60" cy="60" r="4" class="sv-core" /><line x1="60" y1="6" x2="60" y2="26" class="sv-tick" /><line x1="60" y1="94" x2="60" y2="114" class="sv-tick" /><line x1="6" y1="60" x2="26" y2="60" class="sv-tick" /><line x1="94" y1="60" x2="114" y2="60" class="sv-tick" /></svg>
+            </div>
+          </li>
+
+          <li class="step reveal">
+            <div class="step-num" aria-hidden="true"><span>02</span></div>
+            <div class="step-body">
+              <p class="step-kicker mono">MONITOR</p>
+              <h3>Monitor evidence in real time</h3>
+              <p>As reads stream off the sequencer, the platform maps every fragment against the mission — tracking not throughput, but accumulating biological evidence, target by target.</p>
+            </div>
+            <div class="step-visual" aria-hidden="true">
+              <svg viewBox="0 0 120 120"><path d="M10 78 Q 30 78 38 58 T 66 44 T 94 60 T 112 50" class="sv-wave" /><path d="M10 92 Q 32 92 42 74 T 72 62 T 112 70" class="sv-wave sv-wave-2" /><circle cx="94" cy="60" r="3.5" class="sv-core" /></svg>
+            </div>
+          </li>
+
+          <li class="step reveal">
+            <div class="step-num" aria-hidden="true"><span>03</span></div>
+            <div class="step-body">
+              <p class="step-kicker mono">EVALUATE</p>
+              <h3>Evaluate biological readiness</h3>
+              <p>Q-SEQ scores whether the run is sufficient for species identification, AMR gene detection and coverage of key loci — converting raw signal into calibrated readiness.</p>
+            </div>
+            <div class="step-visual" aria-hidden="true">
+              <svg viewBox="0 0 120 120"><rect x="18" y="66" width="12" height="34" rx="2" class="sv-bar" /><rect x="40" y="46" width="12" height="54" rx="2" class="sv-bar" /><rect x="62" y="30" width="12" height="70" rx="2" class="sv-bar sv-bar-hi" /><rect x="84" y="56" width="12" height="44" rx="2" class="sv-bar" /><line x1="10" y1="38" x2="110" y2="38" class="sv-threshold" /></svg>
+            </div>
+          </li>
+
+          <li class="step reveal">
+            <div class="step-num" aria-hidden="true"><span>04</span></div>
+            <div class="step-body">
+              <p class="step-kicker mono">DECIDE</p>
+              <h3>Decide the next action</h3>
+              <p>Continue, stop, review or resequence — a recommendation grounded in evidence quality, made at the moment it saves the most time and delivers the most certainty.</p>
+            </div>
+            <div class="step-visual" aria-hidden="true">
+              <svg viewBox="0 0 120 120"><path d="M20 60 H 58" class="sv-wave" /><path d="M58 60 L 96 30" class="sv-branch" /><path d="M58 60 L 96 60" class="sv-branch sv-branch-hi" /><path d="M58 60 L 96 90" class="sv-branch" /><circle cx="96" cy="60" r="4" class="sv-core" /><circle cx="96" cy="30" r="2.5" class="sv-node" /><circle cx="96" cy="90" r="2.5" class="sv-node" /></svg>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ 05 · CORE FEATURES ============ -->
+    <section class="section section-light section-features" id="features" data-nav-theme="light">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow mono"><span class="eyebrow-index">04</span> CORE FEATURES</p>
+          <h2 class="display">Engineered for<br /><em>evidence</em>, end to end.</h2>
+        </div>
+
+        <div class="features-grid stagger">
+          <article class="feature-card feature-card-wide">
+            <span class="feature-index mono">F·01</span>
+            <h3>Real-time sequencing evidence tracking</h3>
+            <p>Every read is weighed against the mission as it arrives. Evidence accumulates live — no waiting for the run to finish before the interpretation begins.</p>
+            <div class="feature-spark" aria-hidden="true"><svg viewBox="0 0 220 56" preserveAspectRatio="none"><path class="spark-line" d="M0 48 C 20 46 30 40 45 38 S 75 34 90 26 S 130 20 150 14 S 195 8 220 4" /></svg></div>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-index mono">F·02</span>
+            <h3>AMR readiness scoring</h3>
+            <p>A single calibrated score for resistance-detection sufficiency, decomposable to every gene in the panel.</p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-index mono">F·03</span>
+            <h3>Species identification readiness</h3>
+            <p>Taxonomic confidence tracked continuously — from first read to unambiguous call.</p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-index mono">F·04</span>
+            <h3>Coverage debt visualization</h3>
+            <p>See exactly where evidence is owed — which targets are starved, and how far each is from sufficiency.</p>
+          </article>
+
+          <article class="feature-card feature-card-dark">
+            <span class="feature-index mono">F·05</span>
+            <h3>Intelligent stop / continue recommendations</h3>
+            <p>The platform's central act: a defensible, evidence-grounded answer to the question every run asks.</p>
+            <span class="feature-chip mono"><i class="pulse-dot pulse-dot-green"></i>RECOMMENDATION ENGINE</span>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-index mono">F·06</span>
+            <h3>Under-covered target detection</h3>
+            <p>Local starvation surfaces immediately — before it silently invalidates a negative result.</p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-index mono">F·07</span>
+            <h3>Evidence-based run evaluation</h3>
+            <p>Post-run reports written in the language of conclusions, not instrument telemetry.</p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-index mono">F·08</span>
+            <h3>Sequencing workflow intelligence</h3>
+            <p>Patterns across runs inform protocols — sharpening every future mission definition.</p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-index mono">F·09</span>
+            <h3>Future-ready decision support</h3>
+            <p>An extensible readiness framework, built for the questions labs will ask next.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 06 · LIVE SEQUENCING INTELLIGENCE ============ -->
+    <section class="section section-dark section-live" id="intelligence" data-nav-theme="dark">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow mono eyebrow-dark"><span class="eyebrow-index">05</span> CONTROL ROOM</p>
+          <h2 class="display display-dark">Live sequencing<br /><em>intelligence</em></h2>
+          <p class="section-head-note section-head-note-dark">One glance. Full biological situational awareness.</p>
+        </div>
+
+        <div class="console reveal" id="console" role="img" aria-label="Concept interface of the Q-SEQ AMR live run console showing species readiness 96%, AMR readiness 81%, critical target coverage 67% and a recommendation to continue sequencing.">
+          <div class="console-header">
+            <div class="console-header-left">
+              <span class="pulse-dot pulse-dot-green" aria-hidden="true"></span>
+              <span class="mono">RUN-0047 — LIVE</span>
+            </div>
+            <span class="mono console-header-mid">E. FAECIUM · CLINICAL ISOLATE · R10.4.1</span>
+            <span class="mono console-header-right">T+02:47:12</span>
+          </div>
+
+          <div class="console-body">
+            <div class="console-map">
+              <canvas id="genomeCanvas" aria-hidden="true"></canvas>
+              <div class="console-map-center" aria-hidden="true">
+                <span class="mono console-map-label">EVIDENCE MAP</span>
+                <span class="console-map-value" id="evidenceCounter">0.00</span>
+                <span class="mono console-map-sub">Mb EVALUATED</span>
+              </div>
+            </div>
+
+            <div class="console-metrics">
+              <div class="metric" data-value="96" data-tone="pink">
+                <div class="metric-top"><span class="metric-name">Species readiness</span><span class="metric-value mono"><b class="count" data-target="96">0</b>%</span></div>
+                <div class="metric-bar"><span class="metric-fill"></span></div>
+                <p class="metric-note mono">ASSIGNMENT: ENTEROCOCCUS FAECIUM · P&gt;0.999</p>
+              </div>
+
+              <div class="metric" data-value="81" data-tone="violet">
+                <div class="metric-top"><span class="metric-name">AMR readiness</span><span class="metric-value mono"><b class="count" data-target="81">0</b>%</span></div>
+                <div class="metric-bar"><span class="metric-fill"></span></div>
+                <p class="metric-note mono">PANEL: 42 GENES · 34 RESOLVED · 8 ACCUMULATING</p>
+              </div>
+
+              <div class="metric" data-value="67" data-tone="ice">
+                <div class="metric-top"><span class="metric-name">Critical target coverage</span><span class="metric-value mono"><b class="count" data-target="67">0</b>%</span></div>
+                <div class="metric-bar"><span class="metric-fill"></span></div>
+                <p class="metric-note mono">DEBT: vanA OPERON −42% · gyrA LOCUS −18%</p>
+              </div>
+
+              <div class="console-recommendation">
+                <div class="console-rec-left">
+                  <span class="mono console-rec-label">RUN RECOMMENDATION</span>
+                  <span class="console-rec-value"><i class="pulse-dot pulse-dot-green" aria-hidden="true"></i>CONTINUE</span>
+                </div>
+                <p class="console-rec-note">Projected sufficiency for the full AMR panel in ~41 minutes at current evidence rate. Species question already resolved.</p>
+              </div>
+
+              <ul class="console-targets mono" aria-hidden="true">
+                <li><span>vanA</span><span class="ct-track"><i style="--w:58%"></i></span><span>58%</span></li>
+                <li><span>vanB</span><span class="ct-track"><i style="--w:91%" class="done"></i></span><span>91%</span></li>
+                <li><span>gyrA</span><span class="ct-track"><i style="--w:82%"></i></span><span>82%</span></li>
+                <li><span>pbp5</span><span class="ct-track"><i style="--w:96%" class="done"></i></span><span>96%</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <p class="console-caption mono reveal">CONCEPT INTERFACE — Q-SEQ RUN CONSOLE / EVIDENCE VIEW</p>
+      </div>
+    </section>
+
+    <!-- ============ 07 · USE CASES ============ -->
+    <section class="section section-light" id="use-cases" data-nav-theme="light">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow mono"><span class="eyebrow-index">06</span> USE CASES</p>
+          <h2 class="display">Designed for real<br /><em>biological questions</em></h2>
+        </div>
+
+        <div class="cases-grid stagger">
+          <a class="case-card" href="#contact">
+            <span class="case-index mono">U·01</span>
+            <h3>Antimicrobial resistance sequencing</h3>
+            <p>Resolve resistomes with quantified confidence — and know when a negative is truly a negative.</p>
+            <span class="case-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M2 14 14 2M5 2h9v9" /></svg></span>
+          </a>
+          <a class="case-card" href="#contact">
+            <span class="case-index mono">U·02</span>
+            <h3>Bacterial isolate analysis</h3>
+            <p>From colony to confident characterisation, with readiness tracked at every locus that matters.</p>
+            <span class="case-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M2 14 14 2M5 2h9v9" /></svg></span>
+          </a>
+          <a class="case-card" href="#contact">
+            <span class="case-index mono">U·03</span>
+            <h3>Research sequencing workflows</h3>
+            <p>Question-aware monitoring for any protocol where evidence sufficiency decides the result.</p>
+            <span class="case-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M2 14 14 2M5 2h9v9" /></svg></span>
+          </a>
+          <a class="case-card" href="#contact">
+            <span class="case-index mono">U·04</span>
+            <h3>Sequencing quality intelligence</h3>
+            <p>A live, biologically grounded quality layer above raw instrument metrics.</p>
+            <span class="case-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M2 14 14 2M5 2h9v9" /></svg></span>
+          </a>
+          <a class="case-card" href="#contact">
+            <span class="case-index mono">U·05</span>
+            <h3>Bioinformatics decision support</h3>
+            <p>Readiness scores that plug directly into pipelines, LIMS and reporting workflows.</p>
+            <span class="case-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M2 14 14 2M5 2h9v9" /></svg></span>
+          </a>
+          <a class="case-card" href="#contact">
+            <span class="case-index mono">U·06</span>
+            <h3>Academic &amp; translational labs</h3>
+            <p>From teaching labs to surveillance programmes — defensible decisions at research scale.</p>
+            <span class="case-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M2 14 14 2M5 2h9v9" /></svg></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 08 · WHY IT MATTERS ============ -->
+    <section class="section section-gray section-why" id="why" data-nav-theme="light">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow mono"><span class="eyebrow-index">07</span> IMPACT</p>
+          <h2 class="display">Why Q-SEQ <em>matters</em></h2>
+        </div>
+
+        <blockquote class="why-statement reveal">
+          <p>Sequencing is no longer the bottleneck. <span>Knowing what the sequence is evidence <em>for</em> — that is the bottleneck.</span></p>
+        </blockquote>
+
+        <div class="why-grid stagger">
+          <div class="why-item"><span class="mono">W·01</span><h3>Time, returned</h3><p>Runs end when the question is answered — not when the schedule says so. Hours of instrument time flow back to the queue.</p></div>
+          <div class="why-item"><span class="mono">W·02</span><h3>Decision quality</h3><p>Stop, continue and resequence become calibrated judgements, consistent across operators and reproducible across labs.</p></div>
+          <div class="why-item"><span class="mono">W·03</span><h3>Meaningful interpretation</h3><p>Results are framed against sufficiency, so every conclusion carries its evidential weight with it.</p></div>
+          <div class="why-item"><span class="mono">W·04</span><h3>Reduced uncertainty</h3><p>Negatives become interpretable, borderline calls become visible, and confidence becomes a number rather than a feeling.</p></div>
+          <div class="why-item"><span class="mono">W·05</span><h3>Data to action</h3><p>Q-SEQ bridges the gap between read generation and biological action — the last mile of every sequencing workflow.</p></div>
+          <div class="why-item"><span class="mono">W·06</span><h3>Surveillance-grade rigour</h3><p>For AMR research and surveillance programmes, evidence-aware runs mean comparable, trustworthy datasets at scale.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 09 · TECHNOLOGY ============ -->
+    <section class="section section-dark section-tech" id="technology" data-nav-theme="dark">
+      <canvas class="tech-canvas" id="techCanvas" aria-hidden="true"></canvas>
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow mono eyebrow-dark"><span class="eyebrow-index">08</span> TECHNOLOGY</p>
+          <h2 class="display display-dark">Built at the intersection of<br /><em>bioinformatics</em>, sequencing<br />and intelligence.</h2>
+        </div>
+
+        <div class="tech-grid reveal">
+          <p class="tech-lede">Q-SEQ AMR is a computational instrument. Beneath the interface sits a real-time evidence engine — streaming alignment, probabilistic readiness models and question-aware coverage accounting, composed into a single decision layer for the sequencing lab.</p>
+
+          <ul class="tech-list stagger">
+            <li><span class="mono">T·01</span><div><h3>Computational biology</h3><p>Readiness models grounded in how evidence actually accumulates across genomes.</p></div></li>
+            <li><span class="mono">T·02</span><div><h3>Sequencing analytics</h3><p>Streaming analysis tuned for long-read platforms and adaptive workflows.</p></div></li>
+            <li><span class="mono">T·03</span><div><h3>AMR interpretation</h3><p>Curated resistance panels with per-gene and per-mutation evidence thresholds.</p></div></li>
+            <li><span class="mono">T·04</span><div><h3>Bioinformatics workflows</h3><p>Composable outputs designed to sit inside real pipelines, not beside them.</p></div></li>
+            <li><span class="mono">T·05</span><div><h3>Scientific data visualization</h3><p>Evidence rendered so a decision can be read at a glance — and defended afterwards.</p></div></li>
+            <li><span class="mono">T·06</span><div><h3>Research-grade design thinking</h3><p>Every surface built with the rigour of the science it represents.</p></div></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 10 · FINAL CTA ============ -->
+    <section class="section section-dark section-cta" id="contact" data-nav-theme="dark">
+      <div class="container">
+        <div class="cta-inner reveal">
+          <p class="eyebrow mono eyebrow-dark"><span class="eyebrow-index">09</span> BEGIN</p>
+          <h2 class="cta-title">Build the future of<br /><em>sequencing intelligence</em><i class="accent-dot">.</i></h2>
+          <p class="cta-sub">Partner with us to bring biological-question-aware sequencing to your lab, your programme, your platform.</p>
+          <div class="cta-actions">
+            <a class="btn btn-solid btn-light" href="mailto:hello@qseq-amr.bio"><span>Request Demo</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 3.5 13.5 8 9 12.5" /></svg></a>
+            <a class="btn btn-ghost btn-ghost-dark" href="#platform"><span>Explore Platform</span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-marquee" aria-hidden="true">
+        <div class="cta-marquee-track">
+          <span>KNOW WHEN THE EVIDENCE IS ENOUGH&nbsp;—&nbsp;</span>
+          <span>KNOW WHEN THE EVIDENCE IS ENOUGH&nbsp;—&nbsp;</span>
+          <span>KNOW WHEN THE EVIDENCE IS ENOUGH&nbsp;—&nbsp;</span>
+          <span>KNOW WHEN THE EVIDENCE IS ENOUGH&nbsp;—&nbsp;</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" data-nav-theme="dark">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="footer-logo" href="#top">Q-SEQ<em>/AMR</em></a>
+          <p class="footer-tag">A biological-question-aware sequencing intelligence platform.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <div class="footer-col">
+            <p class="mono footer-col-title">INDEX</p>
+            <a href="#platform">About</a>
+            <a href="#platform">Platform</a>
+            <a href="#workflow">Workflow</a>
+          </div>
+          <div class="footer-col">
+            <p class="mono footer-col-title">EXPLORE</p>
+            <a href="#features">Features</a>
+            <a href="#use-cases">Use Cases</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <div class="footer-col">
+            <p class="mono footer-col-title">SIGNAL</p>
+            <a href="mailto:hello@qseq-amr.bio">hello@qseq-amr.bio</a>
+            <a href="#intelligence">Run Console</a>
+            <a href="#technology">Technology</a>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="mono">© 2026 Q-SEQ AMR — CONCEPT</span>
+        <span class="mono footer-coords">EVIDENCE ENGINE v2.4 · 51.7520° N / 1.2577° W</span>
+        <a class="mono footer-top-link" href="#top">BACK TO SIGNAL ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
