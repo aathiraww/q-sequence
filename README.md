@@ -9,21 +9,19 @@ antimicrobial resistance (AMR) analysis.
 
 ## Design system
 
-- **Aesthetic** — luxury-biotech editorial: off-white / soft-gray minimalism
-  balanced against charcoal "control room" sections with restrained neon
-  (magenta, electric violet, icy blue, pale green) used only for scientific
-  emphasis.
-- **Typography** — Clash Display (oversized editorial headlines),
+- **Aesthetic** — light, airy editorial futurism: ink-on-paper typography,
+  soft sculptural 3D renders in pale tones, generous whitespace, and one
+  contained dark "control room" console panel. Accent color is reduced to
+  small technical details (dots, labels, micro-chips).
+- **Typography** — Clash Display (oversized wordmark & headlines),
   Satoshi (body), JetBrains Mono (technical labels & metadata).
-- **Cinematic 3D imagery** — four art-directed renders (`assets/`): a neon
-  magenta glass DNA sculpture (hero), pale molecular bead chains, a white
-  sphere-model helix, and a glowing translucent cell — presented with
-  editorial framing, glass panels and floating annotation chips.
-- **Generative canvas layers** — hand-written, no libraries:
-  - hero: drifting read fragments over the render, plus scroll parallax;
-  - live console: a circular genome evidence map with per-segment coverage,
-    starved-target flicker and a rotating scanner;
-  - technology: a slow flowing strand field.
+- **Art-directed 3D imagery** (`assets/`, WebP): a misty pale molecular
+  scene (hero stage), sage bead chains with floating annotation chips, a
+  white sphere-model helix, a glowing translucent cell specimen, and a warm
+  porous lattice behind the frosted-glass closing panel.
+- **Generative canvas** — the live console renders a circular genome
+  evidence map (per-segment coverage, starved-target flicker, rotating
+  scanner), hand-written with no libraries.
 - **Motion** — preloader calibration bar, masked hero line reveals,
   intersection-driven section reveals with stagger, counter and metric-bar
   animations, cursor-tracked card glow, marquee/ticker strips. Fully disabled
