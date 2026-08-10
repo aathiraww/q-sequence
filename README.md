@@ -15,9 +15,12 @@ antimicrobial resistance (AMR) analysis.
   emphasis.
 - **Typography** — Clash Display (oversized editorial headlines),
   Satoshi (body), JetBrains Mono (technical labels & metadata).
-- **Generative visuals** — three hand-written canvas systems, no libraries:
-  - hero: a leaning particle double-helix with base-pair rungs, drifting read
-    fragments and a travelling evidence pulse;
+- **Cinematic 3D imagery** — four art-directed renders (`assets/`): a neon
+  magenta glass DNA sculpture (hero), pale molecular bead chains, a white
+  sphere-model helix, and a glowing translucent cell — presented with
+  editorial framing, glass panels and floating annotation chips.
+- **Generative canvas layers** — hand-written, no libraries:
+  - hero: drifting read fragments over the render, plus scroll parallax;
   - live console: a circular genome evidence map with per-segment coverage,
     starved-target flicker and a rotating scanner;
   - technology: a slow flowing strand field.
