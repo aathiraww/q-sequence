@@ -73,8 +73,12 @@
 
     <!-- ============ 01 · HERO ============ -->
     <section class="hero" id="hero">
+      <div class="hero-bg" aria-hidden="true">
+        <img src="assets/qseq-hero-neon.webp" alt="" fetchpriority="high" />
+      </div>
       <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
       <div class="hero-vignette" aria-hidden="true"></div>
+      <div class="hero-glass" aria-hidden="true"></div>
 
       <div class="hero-frame" aria-hidden="true">
         <span class="hero-frame-item mono" data-pos="tl">BIOLOGICAL-QUESTION-AWARE</span>
@@ -139,6 +143,21 @@
             <p>Every run is evaluated against the biological question it was started for — not against generic throughput thresholds.</p>
           </div>
         </div>
+
+        <figure class="platform-visual reveal" aria-label="Soft molecular bead structures annotated with live readiness chips">
+          <img src="assets/qseq-molecules-light.webp" alt="Pale sage and cream molecular bead structures floating in a bright studio space" loading="lazy" />
+          <div class="visual-chip" style="--cx: 8%; --cy: 16%; --d: 0s">
+            <span class="mono">SPECIES ID</span>
+            <p>Resolved at read 214,508 — evidence beyond threshold.</p>
+            <i aria-hidden="true">+</i>
+          </div>
+          <div class="visual-chip" style="--cx: 58%; --cy: 58%; --d: 1.3s">
+            <span class="mono">AMR PANEL</span>
+            <p>34 of 42 genes resolved. vanA operon still accumulating.</p>
+            <i aria-hidden="true">+</i>
+          </div>
+          <figcaption class="mono platform-visual-caption">FIG. 00 — EVIDENCE, OBSERVED AS IT ASSEMBLES</figcaption>
+        </figure>
 
         <div class="readiness-grid stagger">
           <article class="readiness-card">
@@ -490,9 +509,20 @@
           <h2 class="display">Why Q-SEQ <em>matters</em></h2>
         </div>
 
-        <blockquote class="why-statement reveal">
-          <p>Sequencing is no longer the bottleneck. <span>Knowing what the sequence is evidence <em>for</em> — that is the bottleneck.</span></p>
-        </blockquote>
+        <div class="why-lead">
+          <blockquote class="why-statement reveal">
+            <p>Sequencing is no longer the bottleneck. <span>Knowing what the sequence is evidence <em>for</em> — that is the bottleneck.</span></p>
+          </blockquote>
+          <figure class="why-figure reveal">
+            <img src="assets/qseq-dna-white.webp" alt="Sculptural white DNA helix built from thousands of small matte spheres" loading="lazy" />
+            <div class="visual-chip why-chip" style="--d: 0.6s">
+              <span class="mono">READINESS</span>
+              <p>A number, not a feeling — carried with every conclusion.</p>
+              <i aria-hidden="true">+</i>
+            </div>
+            <figcaption class="mono">SPHERE-MODEL HELIX — STUDY 03</figcaption>
+          </figure>
+        </div>
 
         <div class="why-grid stagger">
           <div class="why-item"><span class="mono">W·01</span><h3>Time, returned</h3><p>Runs end when the question is answered — not when the schedule says so. Hours of instrument time flow back to the queue.</p></div>
@@ -515,7 +545,13 @@
         </div>
 
         <div class="tech-grid reveal">
-          <p class="tech-lede">Q-SEQ AMR is a computational instrument. Beneath the interface sits a real-time evidence engine — streaming alignment, probabilistic readiness models and question-aware coverage accounting, composed into a single decision layer for the sequencing lab.</p>
+          <div class="tech-left">
+            <figure class="tech-figure">
+              <img src="assets/qseq-cell-dark.webp" alt="Translucent biological cell glowing icy blue and violet in dark space" loading="lazy" />
+              <figcaption class="mono">SPECIMEN — MEMBRANE MODEL / SUBSURFACE SCATTER</figcaption>
+            </figure>
+            <p class="tech-lede">Q-SEQ AMR is a computational instrument. Beneath the interface sits a real-time evidence engine — streaming alignment, probabilistic readiness models and question-aware coverage accounting, composed into a single decision layer for the sequencing lab.</p>
+          </div>
 
           <ul class="tech-list stagger">
             <li><span class="mono">T·01</span><div><h3>Computational biology</h3><p>Readiness models grounded in how evidence actually accumulates across genomes.</p></div></li>

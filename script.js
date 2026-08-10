@@ -240,46 +240,42 @@
   };
 
   /* ============================================================
-     HERO — sculptural double helix + drifting reads
+     HERO — cinematic render + drifting read fragments + parallax
      ============================================================ */
   (() => {
     const canvas = document.getElementById("heroCanvas");
     if (!canvas) return;
 
-    // Pointer parallax (very subtle)
-    let px = 0, py = 0, tx = 0, ty = 0;
-    if (!prefersReduced) {
-      window.addEventListener("pointermove", (e) => {
-        tx = (e.clientX / window.innerWidth - 0.5) * 2;
-        ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    /* Scroll parallax on the hero render */
+    const heroImg = document.querySelector(".hero-bg img");
+    if (heroImg && !prefersReduced) {
+      let ticking = false;
+      const parallax = () => {
+        ticking = false;
+        const y = Math.min(window.scrollY, window.innerHeight);
+        heroImg.style.transform = `scale(1.06) translateY(${y * 0.12}px)`;
+      };
+      window.addEventListener("scroll", () => {
+        // Skip until the entrance zoom animation has finished
+        if (!ticking && document.body.classList.contains("loaded")) {
+          ticking = true;
+          requestAnimationFrame(parallax);
+        }
       }, { passive: true });
     }
 
-    // Drifting read fragments
-    const READS = 42;
+    /* Drifting read fragments — a quiet data layer over the render */
+    const READS = 34;
     const reads = Array.from({ length: READS }, (_, i) => ({
       x: Math.random(), y: Math.random(),
       len: 26 + Math.random() * 60,
       sp: 0.012 + Math.random() * 0.035,
-      a: 0.05 + Math.random() * 0.16,
-      tone: i % 9 === 0 ? C.magenta : i % 7 === 0 ? C.ice : C.fog,
+      a: 0.05 + Math.random() * 0.14,
+      tone: i % 8 === 0 ? C.magenta : i % 6 === 0 ? C.ice : C.fog,
     }));
-
-    const RUNGS = 90;
 
     canvasLoop(canvas, (ctx, w, h, t) => {
       ctx.clearRect(0, 0, w, h);
-      px += (tx - px) * 0.04; py += (ty - py) * 0.04;
-
-      const narrow = w < 860;
-      const cx = narrow ? w * 0.5 : w * 0.66;
-      const cy = h * 0.44;
-      const H = h * 0.96;                     // helix span
-      const R = Math.min(w * 0.19, 300);      // helix radius
-      const rot = t * 0.22;
-      const lean = 0.55;                      // static lean angle (rad)
-
-      /* --- drifting reads (background layer) --- */
       ctx.lineCap = "round";
       for (const r of reads) {
         r.x += r.sp / 60;
@@ -297,77 +293,7 @@
         ctx.lineTo(x + r.len, y);
         ctx.stroke();
       }
-
-      /* --- helix --- */
-      const cosL = Math.cos(lean), sinL = Math.sin(lean);
-      const pts = [];
-      for (let i = 0; i <= RUNGS; i++) {
-        const f = i / RUNGS;               // 0..1 along strand
-        const yy = (f - 0.5) * H;
-        const th = f * Math.PI * 3.4 + rot;
-        for (let s = 0; s < 2; s++) {
-          const a = th + s * Math.PI;
-          const xx = Math.cos(a) * R;
-          const zz = Math.sin(a) * R;
-          // lean the whole structure
-          const X = cx + xx * cosL - 0 * sinL + px * 14 * (zz / R);
-          const Y = cy + yy * 0.92 + xx * 0.16 + py * 10 * (zz / R);
-          const depth = (zz / R + 1) / 2;  // 0 back, 1 front
-          pts.push({ X, Y, depth, f, s, i });
-        }
-      }
-
-      // rungs (base-pair bridges)
-      for (let i = 0; i <= RUNGS; i += 3) {
-        const a = pts[i * 2], b = pts[i * 2 + 1];
-        const d = (a.depth + b.depth) / 2;
-        const hot = i % 15 === 0;
-        const tone = hot ? C.magenta : C.fog;
-        ctx.strokeStyle = `rgba(${tone}, ${(hot ? 0.34 : 0.10) * (0.35 + d * 0.65)})`;
-        ctx.lineWidth = hot ? 1.3 : 1;
-        ctx.beginPath();
-        ctx.moveTo(a.X, a.Y);
-        ctx.lineTo(b.X, b.Y);
-        ctx.stroke();
-      }
-
-      // backbone particles (draw back-to-front)
-      const sorted = [...pts].sort((m, n) => m.depth - n.depth);
-      for (const p of sorted) {
-        const hot = p.i % 15 === 0;
-        const cool = p.i % 11 === 0 && !hot;
-        const tone = hot ? C.magenta : cool ? (p.s ? C.violet : C.ice) : C.fog;
-        const alpha = (hot ? 0.95 : cool ? 0.8 : 0.42) * (0.22 + p.depth * 0.78);
-        const rad = (hot ? 2.6 : cool ? 2.1 : 1.5) * (0.5 + p.depth * 0.7);
-        if (hot || cool) {
-          const glow = ctx.createRadialGradient(p.X, p.Y, 0, p.X, p.Y, rad * 6);
-          glow.addColorStop(0, `rgba(${tone}, ${alpha * 0.5})`);
-          glow.addColorStop(1, `rgba(${tone}, 0)`);
-          ctx.fillStyle = glow;
-          ctx.beginPath();
-          ctx.arc(p.X, p.Y, rad * 6, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.fillStyle = `rgba(${tone}, ${alpha})`;
-        ctx.beginPath();
-        ctx.arc(p.X, p.Y, rad, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      /* --- evidence pulse travelling up the helix --- */
-      const pf = (t * 0.14) % 1;
-      const idx = Math.floor(pf * RUNGS) * 2;
-      if (pts[idx]) {
-        const p = pts[idx];
-        const g = ctx.createRadialGradient(p.X, p.Y, 0, p.X, p.Y, 34);
-        g.addColorStop(0, `rgba(${C.magenta}, 0.5)`);
-        g.addColorStop(1, `rgba(${C.magenta}, 0)`);
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(p.X, p.Y, 34, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }, { fpsCap: 60 });
+    }, { fpsCap: 48 });
   })();
 
   /* ============================================================
