@@ -93,17 +93,22 @@
         </div>
       </div>
 
-      <div class="hero-stage reveal">
-        <img src="assets/qseq-hero-mist.webp" alt="Pale sculptural molecular bead chains dissolving into white mist" fetchpriority="high" />
-        <h2 class="hero-statement">Know when the<br />evidence is enough<i class="accent-dot">.</i></h2>
-        <span class="hero-stage-note mono">(REAL-TIME SEQUENCING EVIDENCE — RUN-0047)</span>
-        <span class="hero-tagchip mono" style="--x: 14%; --y: 66%; --d: 0s">gyrA — 96%</span>
-        <span class="hero-tagchip mono" style="--x: 46%; --y: 78%; --d: 1.1s">vanA — ACCUMULATING</span>
-        <span class="hero-tagchip mono" style="--x: 72%; --y: 60%; --d: 2s">READINESS 0.94</span>
-        <a class="hero-explore" href="#platform" aria-label="Explore the platform">
-          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 14 14 2M5 2h9v9" /></svg>
-          <span class="mono">explore</span>
-        </a>
+      <div class="hero-scroll" id="heroScroll">
+        <div class="hero-stage reveal">
+          <img src="assets/qseq-hero-mist.webp" alt="Pale sculptural molecular bead chains dissolving into white mist" fetchpriority="high" />
+          <canvas class="dna-canvas" id="dnaCanvas" aria-hidden="true"></canvas>
+          <h2 class="hero-statement">Know when the<br />evidence is enough<i class="accent-dot">.</i></h2>
+          <span class="hero-stage-note mono">(REAL-TIME SEQUENCING EVIDENCE — RUN-0047)</span>
+          <span class="hero-tagchip mono" style="--x: 12%; --y: 64%; --d: 0s">gyrA — 96%</span>
+          <span class="hero-tagchip mono" style="--x: 38%; --y: 80%; --d: 1.1s">vanA — ACCUMULATING</span>
+          <span class="hero-tagchip mono" style="--x: 74%; --y: 72%; --d: 2s">READINESS 0.94</span>
+          <span class="hero-zoom-caption mono" id="zoomCaption">BASE 4,182,203 — vanA OPERON · READ DEPTH 42×</span>
+          <span class="hero-scroll-hint mono" id="scrollHint">SCROLL — ZOOM TO NUCLEOTIDE <i aria-hidden="true">↓</i></span>
+          <a class="hero-explore" href="#platform" aria-label="Explore the platform">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 14 14 2M5 2h9v9" /></svg>
+            <span class="mono">explore</span>
+          </a>
+        </div>
       </div>
 
       <div class="hero-strip" aria-hidden="true">
