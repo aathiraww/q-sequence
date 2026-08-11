@@ -239,24 +239,173 @@
   };
 
   /* ============================================================
-     HERO — gentle scroll parallax on the stage render
+     HERO — scroll-driven DNA that zooms into its nucleotides
      ============================================================ */
   (() => {
-    const heroImg = document.querySelector(".hero-stage > img");
-    if (!heroImg || prefersReduced) return;
-    let ticking = false;
-    const parallax = () => {
-      ticking = false;
-      const y = Math.min(window.scrollY, window.innerHeight);
-      heroImg.style.transform = `scale(1.08) translateY(${y * 0.045}px)`;
+    const canvas = document.getElementById("dnaCanvas");
+    const wrap = document.getElementById("heroScroll");
+    const stage = document.querySelector(".hero-stage");
+    if (!canvas || !wrap || !stage) return;
+
+    const statement = document.querySelector(".hero-statement");
+    const note = document.querySelector(".hero-stage-note");
+    const chips = [...document.querySelectorAll(".hero-tagchip")];
+    const caption = document.getElementById("zoomCaption");
+    const hint = document.getElementById("scrollHint");
+
+    /* Nucleotide palette — soft scientific tones on the light stage */
+    const BASE_COLOR = {
+      A: "127, 164, 134",   // sage
+      T: "196, 172, 122",   // sand
+      G: "134, 165, 190",   // ice gray-blue
+      C: "209, 128, 165",   // muted rose
     };
-    window.addEventListener("scroll", () => {
-      // Skip until the entrance zoom animation has finished
-      if (!ticking && document.body.classList.contains("loaded")) {
-        ticking = true;
-        requestAnimationFrame(parallax);
+    const PAIR = { A: "T", T: "A", G: "C", C: "G" };
+    const INK = "26, 26, 31";
+
+    /* Deterministic pseudo-random sequence */
+    let seed = 97;
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const LETTERS = ["A", "T", "G", "C"];
+    const N = 72;
+    const seq = Array.from({ length: N }, () => LETTERS[Math.floor(rnd() * 4)]);
+
+    const FOCUS = 40;                 // the rung the camera dives into
+    let progress = prefersReduced ? 0 : 0;
+
+    const updateProgress = () => {
+      const track = wrap.offsetHeight - stage.offsetHeight;
+      if (track <= 0) return;
+      progress = Math.min(1, Math.max(0, -wrap.getBoundingClientRect().top / track));
+    };
+    if (!prefersReduced) window.addEventListener("scroll", updateProgress, { passive: true });
+
+    const easeP = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x)); // smoothstep
+
+    const updateOverlays = (p) => {
+      if (prefersReduced) return;
+      const fadeOut = Math.max(0, 1 - p * 2.4);
+      if (statement) statement.style.opacity = fadeOut;
+      if (note) note.style.opacity = fadeOut;
+      chips.forEach((c) => { c.style.opacity = fadeOut; c.style.visibility = fadeOut < 0.02 ? "hidden" : "visible"; });
+      if (caption) caption.style.opacity = Math.max(0, Math.min(1, (p - 0.66) / 0.22));
+      if (hint) hint.style.opacity = Math.max(0, 1 - p * 3.2);
+    };
+
+    canvasLoop(canvas, (ctx, w, h, t) => {
+      updateOverlays(easeP(progress));
+      ctx.clearRect(0, 0, w, h);
+
+      const p = easeP(progress);
+      const narrow = w < 700;
+      const zoom = 1 + p * p * 7.4;                       // 1 → ~8.4
+      const cx = w * (narrow ? 0.5 : 0.64) + (w * 0.5 - w * (narrow ? 0.5 : 0.64)) * p;
+      const cy = h * 0.52;
+      const R = Math.min(w * (narrow ? 0.3 : 0.125), h * 0.21) * zoom;
+      const spacing = (h / 24) * zoom;
+      const rot = (prefersReduced ? 0.9 : t * 0.22) + p * 2.2;
+      const twist = 0.585;                                 // rad per base pair
+
+      /* Entrance fade so the helix settles softly over the mist */
+      const born = Math.min(1, Math.max(0, (t - 0.2) / 1.4));
+      ctx.globalAlpha = prefersReduced ? 1 : born;
+
+      const letterAlpha = Math.max(0, Math.min(1, (zoom - 3.4) / 3));
+      const rungs = [];
+      for (let i = 0; i < N; i++) {
+        const y = cy + (i - FOCUS) * spacing;
+        if (y < -spacing || y > h + spacing) continue;
+        const a = i * twist + rot;
+        const c1 = Math.cos(a), s1 = Math.sin(a);
+        rungs.push({
+          i, y,
+          x1: cx + c1 * R, z1: s1,
+          x2: cx - c1 * R, z2: -s1,
+        });
       }
-    }, { passive: true });
+
+      /* Back-to-front strand pass for correct overlap */
+      const dot = (x, y, r, tone, alpha) => {
+        ctx.fillStyle = `rgba(${tone}, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      };
+
+      for (const rung of rungs) {
+        const base1 = seq[rung.i];
+        const base2 = PAIR[base1];
+        const dMid = 0.5 + (rung.z1 + rung.z2) * 0.25;      // ~0.5 always; kept for clarity
+
+        /* base-pair bridge */
+        const bx1 = rung.x1 + (rung.x2 - rung.x1) * 0.22;
+        const bx2 = rung.x1 + (rung.x2 - rung.x1) * 0.78;
+        ctx.strokeStyle = `rgba(${INK}, ${0.16 + 0.1 * dMid})`;
+        ctx.lineWidth = Math.max(1, zoom * 0.5);
+        ctx.beginPath();
+        ctx.moveTo(rung.x1, rung.y);
+        ctx.lineTo(rung.x2, rung.y);
+        ctx.stroke();
+
+        /* hydrogen-bond ticks appear at deep zoom */
+        if (zoom > 5) {
+          const ha = Math.min(0.55, (zoom - 5) / 4);
+          const bonds = base1 === "A" || base1 === "T" ? 2 : 3;
+          const mid = (bx1 + bx2) / 2, span = (bx2 - bx1) * 0.16;
+          ctx.strokeStyle = `rgba(${INK}, ${ha})`;
+          ctx.lineWidth = Math.max(1, zoom * 0.22);
+          for (let b = 0; b < bonds; b++) {
+            const off = (b - (bonds - 1) / 2) * spacing * 0.1;
+            ctx.beginPath();
+            ctx.moveTo(mid - span, rung.y + off);
+            ctx.lineTo(mid + span, rung.y + off);
+            ctx.stroke();
+          }
+        }
+
+        /* the two nucleotides */
+        const nR = Math.max(3, zoom * 2.1);
+        const d1 = 0.55 + rung.z1 * 0.45, d2 = 0.55 + rung.z2 * 0.45;
+        dot(bx1, rung.y, nR * (0.75 + d1 * 0.35), BASE_COLOR[base1], 0.5 + d1 * 0.5);
+        dot(bx2, rung.y, nR * (0.75 + d2 * 0.35), BASE_COLOR[base2], 0.5 + d2 * 0.5);
+
+        /* backbone beads */
+        const bR = Math.max(2.4, zoom * 1.5);
+        dot(rung.x1, rung.y, bR * (0.7 + d1 * 0.4), INK, 0.28 + d1 * 0.5);
+        dot(rung.x2, rung.y, bR * (0.7 + d2 * 0.4), INK, 0.28 + d2 * 0.5);
+
+        /* base letters — legible only once the camera is close */
+        if (letterAlpha > 0.02) {
+          const fs = Math.min(26, 3.9 * zoom);
+          ctx.font = `500 ${fs}px "JetBrains Mono", monospace`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillStyle = `rgba(${INK}, ${letterAlpha * 0.92})`;
+          ctx.fillText(base1, bx1, rung.y + 1);
+          ctx.fillText(base2, bx2, rung.y + 1);
+        }
+      }
+
+      /* smooth backbone threads (finely sampled sine curves) */
+      const iMin = FOCUS - Math.ceil((cy + spacing) / spacing);
+      const iMax = FOCUS + Math.ceil((h - cy + spacing) / spacing);
+      ctx.lineWidth = Math.max(1, zoom * 0.42);
+      for (let s = 0; s < 2; s++) {
+        ctx.strokeStyle = `rgba(${INK}, 0.28)`;
+        ctx.beginPath();
+        let started = false;
+        for (let j = iMin; j <= iMax; j += 0.2) {
+          const y = cy + (j - FOCUS) * spacing;
+          const a = j * twist + rot + (s === 0 ? 0 : Math.PI);
+          const x = cx + Math.cos(a) * R;
+          if (!started) { ctx.moveTo(x, y); started = true; }
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+
+      ctx.globalAlpha = 1;
+    }, { fpsCap: 60 });
   })();
 
   /* ============================================================

@@ -342,14 +342,20 @@ body.loaded .hero-line > span { transform: none; }
 .hero-lede { max-width: 52ch; color: var(--ink-soft); font-size: 1.0625rem; }
 .hero-actions { display: flex; gap: 0.9rem; flex-wrap: wrap; }
 
-/* Image stage */
-.hero-stage {
+/* Image stage — pinned while the DNA zoom plays */
+.hero-scroll {
   position: relative;
+  height: 260vh;
   margin-inline: calc(var(--gutter) * 0.5);
+}
+.hero-stage {
+  position: sticky;
+  top: clamp(4.6rem, 10vh, 6.4rem);
   border-radius: calc(var(--radius) + 10px);
   overflow: hidden;
   background: #fff;
 }
+.dna-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .hero-stage > img {
   width: 100%;
   height: clamp(420px, 74vh, 720px);
@@ -396,6 +402,35 @@ body.loaded .hero-line > span { transform: none; }
   content: ""; width: 5px; height: 5px; border-radius: 50%;
   background: var(--magenta); flex: none;
 }
+
+.hero-zoom-caption {
+  position: absolute;
+  left: clamp(1.4rem, 4vw, 3.8rem);
+  bottom: clamp(1.4rem, 4vw, 3rem);
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(13, 13, 16, 0.07);
+  border-radius: 8px;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.5625rem; color: var(--ink-soft);
+  box-shadow: 0 10px 26px -14px rgba(13, 13, 16, 0.28);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  opacity: 0; pointer-events: none;
+}
+.hero-zoom-caption::before {
+  content: ""; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--magenta); flex: none;
+}
+.hero-scroll-hint {
+  position: absolute;
+  left: 50%; bottom: clamp(1.2rem, 3vw, 2.2rem);
+  transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  color: var(--ink-mute); font-size: 0.5625rem;
+  pointer-events: none;
+}
+.hero-scroll-hint i { font-style: normal; animation: hintBob 1.8s ease-in-out infinite; }
+@keyframes hintBob { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(3px); } }
 
 .hero-explore {
   position: absolute;
@@ -981,8 +1016,8 @@ body.loaded .hero-line > span { transform: none; }
   .why-figure img { height: 320px; }
   .hero-tagchip, .hero-stage-note { display: none; }
   .hero-explore { width: 66px; height: 66px; }
-  .hero-stage { margin-inline: var(--gutter); }
-  .hero-stage > img { height: 340px; }
+  .hero-scroll { margin-inline: var(--gutter); height: 200vh; }
+  .hero-stage > img { height: min(420px, 68vh); }
   .cta-stage { min-height: 0; }
   .cta-panel { margin: 1rem; }
   .hero-actions .btn { width: 100%; justify-content: center; }
@@ -994,6 +1029,9 @@ body.loaded .hero-line > span { transform: none; }
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .hero-scroll { height: auto; }
+  .hero-stage { position: relative; top: 0; }
+  .hero-scroll-hint { display: none; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
