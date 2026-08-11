@@ -299,7 +299,7 @@
       const p = easeP(progress);
       const pz = Math.min(1, p / 0.85);                   // dwell on the close-up for the last 15%
       const narrow = w < 700;
-      const zoom = 1 + pz * pz * 7.4;                     // 1 → ~8.4
+      const zoom = 1 + pz * pz * 5.4;                     // 1 → ~6.4
       const cx = w * (narrow ? 0.5 : 0.64) + (w * 0.5 - w * (narrow ? 0.5 : 0.64)) * pz;
       const cy = h * 0.52;
       const R = Math.min(w * (narrow ? 0.3 : 0.125), h * 0.21) * zoom;
@@ -311,7 +311,7 @@
       const born = Math.min(1, Math.max(0, (t - 0.2) / 1.4));
       ctx.globalAlpha = prefersReduced ? 1 : born;
 
-      const letterAlpha = Math.max(0, Math.min(1, (zoom - 3.4) / 3));
+      const letterAlpha = Math.max(0, Math.min(1, (zoom - 3) / 2.4));
       const rungs = [];
       for (let i = 0; i < N; i++) {
         const y = cy + (i - FOCUS) * spacing;
@@ -365,7 +365,7 @@
         }
 
         /* the two nucleotides */
-        const nR = Math.max(3, zoom * 2.1);
+        const nR = Math.max(3, zoom * 2.8);
         const d1 = 0.55 + rung.z1 * 0.45, d2 = 0.55 + rung.z2 * 0.45;
         dot(bx1, rung.y, nR * (0.75 + d1 * 0.35), BASE_COLOR[base1], 0.5 + d1 * 0.5);
         dot(bx2, rung.y, nR * (0.75 + d2 * 0.35), BASE_COLOR[base2], 0.5 + d2 * 0.5);
