@@ -40,7 +40,7 @@
   const syncNav = () => {
     nav.classList.toggle("scrolled", window.scrollY > 24);
     const probeY = nav.offsetHeight * 0.6;
-    let theme = "dark"; // hero default
+    let theme = "light"; // hero default
     for (const s of themedSections) {
       const r = s.getBoundingClientRect();
       if (r.top <= probeY && r.bottom > probeY) { theme = s.dataset.navTheme; break; }
@@ -58,8 +58,7 @@
     overlay.classList.toggle("open", open);
     overlay.setAttribute("aria-hidden", String(!open));
     document.body.style.overflow = open ? "hidden" : "";
-    if (open) nav.classList.remove("on-light");
-    else syncNav();
+    syncNav();
   };
   burger.addEventListener("click", () => setMenu(burger.getAttribute("aria-expanded") !== "true"));
   overlay.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
@@ -240,60 +239,24 @@
   };
 
   /* ============================================================
-     HERO — cinematic render + drifting read fragments + parallax
+     HERO — gentle scroll parallax on the stage render
      ============================================================ */
   (() => {
-    const canvas = document.getElementById("heroCanvas");
-    if (!canvas) return;
-
-    /* Scroll parallax on the hero render */
-    const heroImg = document.querySelector(".hero-bg img");
-    if (heroImg && !prefersReduced) {
-      let ticking = false;
-      const parallax = () => {
-        ticking = false;
-        const y = Math.min(window.scrollY, window.innerHeight);
-        heroImg.style.transform = `scale(1.06) translateY(${y * 0.12}px)`;
-      };
-      window.addEventListener("scroll", () => {
-        // Skip until the entrance zoom animation has finished
-        if (!ticking && document.body.classList.contains("loaded")) {
-          ticking = true;
-          requestAnimationFrame(parallax);
-        }
-      }, { passive: true });
-    }
-
-    /* Drifting read fragments — a quiet data layer over the render */
-    const READS = 34;
-    const reads = Array.from({ length: READS }, (_, i) => ({
-      x: Math.random(), y: Math.random(),
-      len: 26 + Math.random() * 60,
-      sp: 0.012 + Math.random() * 0.035,
-      a: 0.05 + Math.random() * 0.14,
-      tone: i % 8 === 0 ? C.magenta : i % 6 === 0 ? C.ice : C.fog,
-    }));
-
-    canvasLoop(canvas, (ctx, w, h, t) => {
-      ctx.clearRect(0, 0, w, h);
-      ctx.lineCap = "round";
-      for (const r of reads) {
-        r.x += r.sp / 60;
-        if (r.x > 1.1) { r.x = -0.12; r.y = Math.random(); }
-        const y = r.y * h + Math.sin(t * 0.5 + r.y * 9) * 8;
-        const x = r.x * w;
-        const grad = ctx.createLinearGradient(x, y, x + r.len, y);
-        grad.addColorStop(0, `rgba(${r.tone}, 0)`);
-        grad.addColorStop(0.75, `rgba(${r.tone}, ${r.a})`);
-        grad.addColorStop(1, `rgba(${r.tone}, 0)`);
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 1.2;
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x + r.len, y);
-        ctx.stroke();
+    const heroImg = document.querySelector(".hero-stage > img");
+    if (!heroImg || prefersReduced) return;
+    let ticking = false;
+    const parallax = () => {
+      ticking = false;
+      const y = Math.min(window.scrollY, window.innerHeight);
+      heroImg.style.transform = `scale(1.08) translateY(${y * 0.045}px)`;
+    };
+    window.addEventListener("scroll", () => {
+      // Skip until the entrance zoom animation has finished
+      if (!ticking && document.body.classList.contains("loaded")) {
+        ticking = true;
+        requestAnimationFrame(parallax);
       }
-    }, { fpsCap: 48 });
+    }, { passive: true });
   })();
 
   /* ============================================================
@@ -397,40 +360,6 @@
         ctx.fill();
       }
     }, { fpsCap: 48 });
-  })();
-
-  /* ============================================================
-     TECHNOLOGY — flowing strand field
-     ============================================================ */
-  (() => {
-    const canvas = document.getElementById("techCanvas");
-    if (!canvas) return;
-
-    const STRANDS = 4, PER = 60;
-
-    canvasLoop(canvas, (ctx, w, h, t) => {
-      ctx.clearRect(0, 0, w, h);
-      for (let s = 0; s < STRANDS; s++) {
-        const baseY = h * (0.2 + s * 0.21);
-        const amp = 26 + s * 12;
-        const speed = 0.14 + s * 0.05;
-        const tone = s === 1 ? C.violet : s === 2 ? C.magenta : C.fog;
-        const baseA = s === 0 || s === 3 ? 0.10 : 0.16;
-        for (let i = 0; i < PER; i++) {
-          const f = i / (PER - 1);
-          const x = f * (w + 80) - 40;
-          const y = baseY
-            + Math.sin(f * 7 + t * speed * 4 + s * 2.2) * amp
-            + Math.sin(f * 2.4 - t * speed * 2.4) * amp * 0.5;
-          const a = baseA * (0.4 + 0.6 * Math.sin(f * Math.PI));
-          const rad = 1 + Math.sin(f * 11 + t + s) * 0.5 + 0.6;
-          ctx.fillStyle = `rgba(${tone}, ${a})`;
-          ctx.beginPath();
-          ctx.arc(x, y, rad, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-    }, { fpsCap: 30 });
   })();
 
   /* ============================================================
