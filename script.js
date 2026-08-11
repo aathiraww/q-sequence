@@ -239,7 +239,8 @@
   };
 
   /* ============================================================
-     HERO — scroll-driven DNA that zooms into its nucleotides
+     HERO — sculptural 3D DNA that dives into its nucleotides
+     True perspective camera. Soft shaded spheres. Depth-sorted.
      ============================================================ */
   (() => {
     const canvas = document.getElementById("dnaCanvas");
@@ -253,26 +254,31 @@
     const caption = document.getElementById("zoomCaption");
     const hint = document.getElementById("scrollHint");
 
-    /* Nucleotide palette — soft scientific tones on the light stage */
-    const BASE_COLOR = {
-      A: "127, 164, 134",   // sage
-      T: "196, 172, 122",   // sand
-      G: "134, 165, 190",   // ice gray-blue
-      C: "209, 128, 165",   // muted rose
+    /* Soft scientific palette — matte beads, never neon */
+    const BASE = {
+      A: [132, 168, 138],
+      T: [198, 168, 118],
+      G: [138, 166, 188],
+      C: [204, 138, 162],
     };
     const PAIR = { A: "T", T: "A", G: "C", C: "G" };
-    const INK = "26, 26, 31";
+    const BACKBONE = [92, 92, 98];
+    const SUGAR = [228, 223, 214];
 
-    /* Deterministic pseudo-random sequence */
     let seed = 97;
     const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     const LETTERS = ["A", "T", "G", "C"];
-    const N = 72;
-    const seq = Array.from({ length: N }, () => LETTERS[Math.floor(rnd() * 4)]);
+    const PAIRS = 56;
+    const FOCUS = 30;
+    const seq = Array.from({ length: PAIRS }, () => LETTERS[Math.floor(rnd() * 4)]);
 
-    const FOCUS = 40;                 // the rung the camera dives into
-    let progress = prefersReduced ? 0 : 0;
+    /* Helix geometry in world units */
+    const HELIX_R = 1.55;
+    const PITCH = 0.72;          // vertical step per base pair
+    const TWIST = 0.60;          // rad per base pair (~34.5°)
+    const BACKBONE_STEPS = 5;    // spheres between each rung on a strand
 
+    let progress = 0;
     const updateProgress = () => {
       const track = wrap.offsetHeight - stage.offsetHeight;
       if (track <= 0) return;
@@ -280,132 +286,249 @@
     };
     if (!prefersReduced) window.addEventListener("scroll", updateProgress, { passive: true });
 
-    const easeP = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x)); // smoothstep
+    const ease = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x));
+    const lerp = (a, b, t) => a + (b - a) * t;
 
     const updateOverlays = (p) => {
       if (prefersReduced) return;
-      const fadeOut = Math.max(0, 1 - p * 2.4);
+      const fadeOut = Math.max(0, 1 - p * 2.2);
       if (statement) statement.style.opacity = fadeOut;
       if (note) note.style.opacity = fadeOut;
-      chips.forEach((c) => { c.style.opacity = fadeOut; c.style.visibility = fadeOut < 0.02 ? "hidden" : "visible"; });
-      if (caption) caption.style.opacity = Math.max(0, Math.min(1, (p - 0.66) / 0.22));
-      if (hint) hint.style.opacity = Math.max(0, 1 - p * 3.2);
+      chips.forEach((c) => {
+        c.style.opacity = fadeOut;
+        c.style.visibility = fadeOut < 0.02 ? "hidden" : "visible";
+      });
+      if (caption) caption.style.opacity = Math.max(0, Math.min(1, (p - 0.58) / 0.22));
+      if (hint) hint.style.opacity = Math.max(0, 1 - p * 3);
+    };
+
+    /* Soft shaded sphere — matte volume with a quiet specular */
+    const drawSphere = (ctx, x, y, r, rgb, alpha, depth) => {
+      if (r < 0.4 || alpha < 0.02) return;
+      const shade = 0.72 + depth * 0.28;
+      const c = [
+        Math.min(255, rgb[0] * shade + 18),
+        Math.min(255, rgb[1] * shade + 18),
+        Math.min(255, rgb[2] * shade + 18),
+      ];
+      const g = ctx.createRadialGradient(
+        x - r * 0.32, y - r * 0.36, r * 0.05,
+        x, y, r
+      );
+      g.addColorStop(0, `rgba(${Math.min(255, c[0] + 55)}, ${Math.min(255, c[1] + 55)}, ${Math.min(255, c[2] + 55)}, ${alpha})`);
+      g.addColorStop(0.45, `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${alpha})`);
+      g.addColorStop(1, `rgba(${c[0] * 0.55}, ${c[1] * 0.55}, ${c[2] * 0.55}, ${alpha * 0.95})`);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill();
     };
 
     canvasLoop(canvas, (ctx, w, h, t) => {
-      updateOverlays(easeP(progress));
+      const p = ease(progress);
+      const pz = Math.min(1, p / 0.82); // dwell on the close-up
+      updateOverlays(p);
       ctx.clearRect(0, 0, w, h);
 
-      const p = easeP(progress);
-      const pz = Math.min(1, p / 0.85);                   // dwell on the close-up for the last 15%
-      const narrow = w < 700;
-      const zoom = 1 + pz * pz * 5.4;                     // 1 → ~6.4
-      const cx = w * (narrow ? 0.5 : 0.64) + (w * 0.5 - w * (narrow ? 0.5 : 0.64)) * pz;
-      const cy = h * 0.52;
-      const R = Math.min(w * (narrow ? 0.3 : 0.125), h * 0.21) * zoom;
-      const spacing = (h / 24) * zoom;
-      const rot = (prefersReduced ? 0.9 : t * 0.22) + p * 2.2;
-      const twist = 0.585;                                 // rad per base pair
+      const born = prefersReduced ? 1 : Math.min(1, Math.max(0, (t - 0.15) / 1.3));
+      if (born < 0.01) return;
 
-      /* Entrance fade so the helix settles softly over the mist */
-      const born = Math.min(1, Math.max(0, (t - 0.2) / 1.4));
-      ctx.globalAlpha = prefersReduced ? 1 : born;
+      /* ---- Camera: starts wide looking at the helix, dives into FOCUS ---- */
+      const focusY = FOCUS * PITCH;
+      const orbit = (prefersReduced ? 0.55 : t * 0.18) + pz * 0.85;
+      const camDist = lerp(11.5, 2.35, pz * pz);
+      const camY = lerp(focusY - 0.4, focusY + 0.15, pz);
+      const camPitch = lerp(0.18, 0.02, pz); // slight downward look at start
+      const fov = lerp(52, 38, pz);          // narrows as we dive
+      const f = (0.5 * Math.min(w, h)) / Math.tan((fov * Math.PI) / 360);
 
-      const letterAlpha = Math.max(0, Math.min(1, (zoom - 3) / 2.4));
-      const rungs = [];
-      for (let i = 0; i < N; i++) {
-        const y = cy + (i - FOCUS) * spacing;
-        if (y < -spacing || y > h + spacing) continue;
-        const a = i * twist + rot;
-        const c1 = Math.cos(a), s1 = Math.sin(a);
-        rungs.push({
-          i, y,
-          x1: cx + c1 * R, z1: s1,
-          x2: cx - c1 * R, z2: -s1,
-        });
-      }
-
-      /* Back-to-front strand pass for correct overlap */
-      const dot = (x, y, r, tone, alpha) => {
-        ctx.fillStyle = `rgba(${tone}, ${alpha})`;
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fill();
+      /* World → camera → screen */
+      const project = (wx, wy, wz) => {
+        /* orbit around Y */
+        const cos = Math.cos(orbit), sin = Math.sin(orbit);
+        let x = wx * cos - wz * sin;
+        let z = wx * sin + wz * cos;
+        let y = wy - camY;
+        /* pitch */
+        const cp = Math.cos(camPitch), sp = Math.sin(camPitch);
+        const y2 = y * cp - z * sp;
+        const z2 = y * sp + z * cp;
+        const zCam = z2 + camDist;
+        if (zCam < 0.35) return null;
+        const s = f / zCam;
+        return {
+          x: w * 0.52 + x * s,
+          y: h * 0.5 + y2 * s,
+          rScale: s,
+          depth: 1 / zCam,
+          zCam,
+        };
       };
 
-      for (const rung of rungs) {
-        const base1 = seq[rung.i];
+      /* Build all sphere primitives, then depth-sort once */
+      const spheres = [];
+      const labels = [];
+      const bonds = [];
+
+      for (let i = 0; i < PAIRS; i++) {
+        const y = i * PITCH;
+        const a = i * TWIST;
+        const base1 = seq[i];
         const base2 = PAIR[base1];
-        const dMid = 0.5 + (rung.z1 + rung.z2) * 0.25;      // ~0.5 always; kept for clarity
 
-        /* base-pair bridge */
-        const bx1 = rung.x1 + (rung.x2 - rung.x1) * 0.22;
-        const bx2 = rung.x1 + (rung.x2 - rung.x1) * 0.78;
-        ctx.strokeStyle = `rgba(${INK}, ${0.16 + 0.1 * dMid})`;
-        ctx.lineWidth = Math.max(1, zoom * 0.5);
-        ctx.beginPath();
-        ctx.moveTo(rung.x1, rung.y);
-        ctx.lineTo(rung.x2, rung.y);
-        ctx.stroke();
+        /* Strand positions at this rung */
+        const sx1 = Math.cos(a) * HELIX_R, sz1 = Math.sin(a) * HELIX_R;
+        const sx2 = Math.cos(a + Math.PI) * HELIX_R, sz2 = Math.sin(a + Math.PI) * HELIX_R;
 
-        /* hydrogen-bond ticks appear at deep zoom */
-        if (zoom > 5) {
-          const ha = Math.min(0.55, (zoom - 5) / 4);
-          const bonds = base1 === "A" || base1 === "T" ? 2 : 3;
-          const mid = (bx1 + bx2) / 2, span = (bx2 - bx1) * 0.16;
-          ctx.strokeStyle = `rgba(${INK}, ${ha})`;
-          ctx.lineWidth = Math.max(1, zoom * 0.22);
-          for (let b = 0; b < bonds; b++) {
-            const off = (b - (bonds - 1) / 2) * spacing * 0.1;
-            ctx.beginPath();
-            ctx.moveTo(mid - span, rung.y + off);
-            ctx.lineTo(mid + span, rung.y + off);
-            ctx.stroke();
+        /* Dense backbone beads between this rung and the next */
+        if (i < PAIRS - 1) {
+          for (let s = 0; s < 2; s++) {
+            const a0 = a + s * Math.PI;
+            const a1 = a0 + TWIST;
+            for (let k = 0; k < BACKBONE_STEPS; k++) {
+              const u = k / BACKBONE_STEPS;
+              const aa = a0 + (a1 - a0) * u;
+              const yy = y + PITCH * u;
+              const wx = Math.cos(aa) * HELIX_R;
+              const wz = Math.sin(aa) * HELIX_R;
+              /* alternate sugar / phosphate for subtle material variation */
+              const rgb = k % 2 === 0 ? BACKBONE : SUGAR;
+              const rad = k % 2 === 0 ? 0.22 : 0.17;
+              spheres.push({ wx, wy: yy, wz, rad, rgb, kind: "bb" });
+            }
           }
         }
 
-        /* the two nucleotides */
-        const nR = Math.max(3, zoom * 2.8);
-        const d1 = 0.55 + rung.z1 * 0.45, d2 = 0.55 + rung.z2 * 0.45;
-        dot(bx1, rung.y, nR * (0.75 + d1 * 0.35), BASE_COLOR[base1], 0.5 + d1 * 0.5);
-        dot(bx2, rung.y, nR * (0.75 + d2 * 0.35), BASE_COLOR[base2], 0.5 + d2 * 0.5);
+        /* Nucleotide spheres along the base-pair axis */
+        const nx1 = lerp(sx1, sx2, 0.28);
+        const nz1 = lerp(sz1, sz2, 0.28);
+        const nx2 = lerp(sx1, sx2, 0.72);
+        const nz2 = lerp(sz1, sz2, 0.72);
+        spheres.push({ wx: nx1, wy: y, wz: nz1, rad: 0.34, rgb: BASE[base1], kind: "nt", letter: base1, i });
+        spheres.push({ wx: nx2, wy: y, wz: nz2, rad: 0.34, rgb: BASE[base2], kind: "nt", letter: base2, i });
 
-        /* backbone beads */
-        const bR = Math.max(2.4, zoom * 1.5);
-        dot(rung.x1, rung.y, bR * (0.7 + d1 * 0.4), INK, 0.28 + d1 * 0.5);
-        dot(rung.x2, rung.y, bR * (0.7 + d2 * 0.4), INK, 0.28 + d2 * 0.5);
+        /* Tiny sugar stubs tying nucleotide to backbone */
+        spheres.push({
+          wx: lerp(sx1, nx1, 0.5), wy: y, wz: lerp(sz1, nz1, 0.5),
+          rad: 0.13, rgb: SUGAR, kind: "link",
+        });
+        spheres.push({
+          wx: lerp(sx2, nx2, 0.5), wy: y, wz: lerp(sz2, nz2, 0.5),
+          rad: 0.13, rgb: SUGAR, kind: "link",
+        });
 
-        /* base letters — legible only once the camera is close */
-        if (letterAlpha > 0.02) {
-          const fs = Math.min(26, 3.9 * zoom);
-          ctx.font = `500 ${fs}px "JetBrains Mono", monospace`;
+        bonds.push({
+          ax: nx1, ay: y, az: nz1,
+          bx: nx2, by: y, bz: nz2,
+          n: base1 === "A" || base1 === "T" ? 2 : 3,
+          i,
+        });
+      }
+
+      /* Project + cull */
+      const drawn = [];
+      for (const s of spheres) {
+        const pjt = project(s.wx, s.wy, s.wz);
+        if (!pjt) continue;
+        /* Soft DOF: spheres far from the focus plane fade & shrink slightly at deep zoom */
+        const dy = Math.abs(s.wy - focusY);
+        const dof = pz > 0.35 ? Math.exp(-dy * dy * pz * 1.8) : 1;
+        const screenR = s.rad * pjt.rScale;
+        if (screenR < 0.35 || dof < 0.04) continue;
+        drawn.push({
+          ...s,
+          x: pjt.x, y: pjt.y,
+          r: screenR,
+          depth: pjt.depth,
+          zCam: pjt.zCam,
+          dof,
+        });
+      }
+      drawn.sort((a, b) => a.depth - b.depth); // back → front
+
+      ctx.save();
+      ctx.globalAlpha = born;
+
+      /* Soft atmospheric haze so the helix feels embedded in the mist */
+      if (pz < 0.5) {
+        const mist = ctx.createRadialGradient(w * 0.55, h * 0.55, 40, w * 0.55, h * 0.55, Math.max(w, h) * 0.55);
+        mist.addColorStop(0, "rgba(244, 242, 238, 0)");
+        mist.addColorStop(1, `rgba(244, 242, 238, ${0.18 * (1 - pz * 2)})`);
+        ctx.fillStyle = mist;
+        ctx.fillRect(0, 0, w, h);
+      }
+
+      /* Hydrogen-bond ticks (projected, only near the focus at deep zoom) */
+      const bondAlpha = Math.max(0, Math.min(1, (pz - 0.45) / 0.3));
+      if (bondAlpha > 0.02) {
+        for (const b of bonds) {
+          if (Math.abs(b.i - FOCUS) > 4) continue;
+          const pa = project(b.ax, b.ay, b.az);
+          const pb = project(b.bx, b.by, b.bz);
+          if (!pa || !pb) continue;
+          const midX = (pa.x + pb.x) / 2;
+          const midY = (pa.y + pb.y) / 2;
+          const dx = pb.x - pa.x, dy = pb.y - pa.y;
+          const len = Math.hypot(dx, dy) || 1;
+          const px = (-dy / len) * Math.max(2.2, pa.rScale * 0.08);
+          const py = (dx / len) * Math.max(2.2, pa.rScale * 0.08);
+          const span = 0.14;
+          ctx.strokeStyle = `rgba(48, 48, 54, ${0.45 * bondAlpha})`;
+          ctx.lineWidth = Math.max(1, pa.rScale * 0.03);
+          ctx.lineCap = "round";
+          for (let k = 0; k < b.n; k++) {
+            const o = (k - (b.n - 1) / 2) * 1.15;
+            const x1 = lerp(pa.x, pb.x, 0.5 - span) + px * o;
+            const y1 = lerp(pa.y, pb.y, 0.5 - span) + py * o;
+            const x2 = lerp(pa.x, pb.x, 0.5 + span) + px * o;
+            const y2 = lerp(pa.y, pb.y, 0.5 + span) + py * o;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+          }
+        }
+      }
+
+      /* Spheres */
+      for (const s of drawn) {
+        const alpha = (s.kind === "nt" ? 0.96 : s.kind === "bb" ? 0.9 : 0.75) * s.dof;
+        drawSphere(ctx, s.x, s.y, s.r, s.rgb, alpha, Math.min(1, s.depth * 3));
+        if (s.kind === "nt" && s.letter && pz > 0.4 && Math.abs(s.i - FOCUS) <= 3) {
+          labels.push(s);
+        }
+      }
+
+      /* Nucleotide letters — crisp labels once the camera is close enough */
+      const letterA = Math.max(0, Math.min(1, (pz - 0.42) / 0.28));
+      if (letterA > 0.02) {
+        for (const s of labels) {
+          const fs = Math.min(28, Math.max(11, s.r * 0.85));
+          ctx.font = `600 ${fs}px "JetBrains Mono", monospace`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillStyle = `rgba(${INK}, ${letterAlpha * 0.92})`;
-          ctx.fillText(base1, bx1, rung.y + 1);
-          ctx.fillText(base2, bx2, rung.y + 1);
+          ctx.fillStyle = `rgba(255, 255, 255, ${0.92 * letterA * s.dof})`;
+          ctx.fillText(s.letter, s.x, s.y + 0.5);
         }
       }
 
-      /* smooth backbone threads (finely sampled sine curves) */
-      const iMin = FOCUS - Math.ceil((cy + spacing) / spacing);
-      const iMax = FOCUS + Math.ceil((h - cy + spacing) / spacing);
-      ctx.lineWidth = Math.max(1, zoom * 0.42);
-      for (let s = 0; s < 2; s++) {
-        ctx.strokeStyle = `rgba(${INK}, 0.28)`;
-        ctx.beginPath();
-        let started = false;
-        for (let j = iMin; j <= iMax; j += 0.2) {
-          const y = cy + (j - FOCUS) * spacing;
-          const a = j * twist + rot + (s === 0 ? 0 : Math.PI);
-          const x = cx + Math.cos(a) * R;
-          if (!started) { ctx.moveTo(x, y); started = true; }
-          else ctx.lineTo(x, y);
+      /* Focus ring — a quiet scientific reticle on the target base pair at deep zoom */
+      if (pz > 0.55) {
+        const fa = Math.min(1, (pz - 0.55) / 0.25);
+        const focusPt = project(0, focusY, 0);
+        if (focusPt) {
+          const rr = lerp(90, 48, pz) * (focusPt.rScale / 40);
+          ctx.strokeStyle = `rgba(48, 48, 54, ${0.22 * fa})`;
+          ctx.lineWidth = 1;
+          ctx.setLineDash([3, 5]);
+          ctx.beginPath();
+          ctx.arc(focusPt.x, focusPt.y, Math.max(28, rr), 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
         }
-        ctx.stroke();
       }
 
-      ctx.globalAlpha = 1;
+      ctx.restore();
     }, { fpsCap: 60 });
   })();
 
