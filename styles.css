@@ -296,7 +296,9 @@ button { font: inherit; background: none; border: 0; cursor: pointer; color: inh
   background: var(--paper);
   color: var(--ink);
   padding-top: clamp(6.8rem, 13vh, 9rem);
-  overflow: hidden;
+  /* NOTE: must be `clip`, not `hidden` — an overflow:hidden ancestor
+     disables position:sticky for the pinned DNA-zoom stage. */
+  overflow: clip;
 }
 
 .hero-tags { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: clamp(1.6rem, 3vh, 2.4rem); }

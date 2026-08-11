@@ -297,9 +297,10 @@
       ctx.clearRect(0, 0, w, h);
 
       const p = easeP(progress);
+      const pz = Math.min(1, p / 0.85);                   // dwell on the close-up for the last 15%
       const narrow = w < 700;
-      const zoom = 1 + p * p * 7.4;                       // 1 → ~8.4
-      const cx = w * (narrow ? 0.5 : 0.64) + (w * 0.5 - w * (narrow ? 0.5 : 0.64)) * p;
+      const zoom = 1 + pz * pz * 7.4;                     // 1 → ~8.4
+      const cx = w * (narrow ? 0.5 : 0.64) + (w * 0.5 - w * (narrow ? 0.5 : 0.64)) * pz;
       const cy = h * 0.52;
       const R = Math.min(w * (narrow ? 0.3 : 0.125), h * 0.21) * zoom;
       const spacing = (h / 24) * zoom;
